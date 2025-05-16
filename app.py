@@ -11,11 +11,28 @@ from config import pg_user, pg_password, db_name
 from flask import Flask, jsonify, render_template, abort, redirect
 from flask_sqlalchemy import SQLAlchemy
 
+from dotenv import load_dotenv
+
+# Load env variables
+load_dotenv()
+
+# Fetch from environment
+pg_user = os.getenv("PG_USER")
+pg_password = os.getenv("PG_PASSWORD")
+pg_host = os.getenv("PG_HOST")
+pg_port = os.getenv("PG_PORT", "5432")  # default port
+db_name = os.getenv("DB_NAME")
+
+
+
 #################################################
 # Database Setup
 ##################################################
 
-engine = create_engine('postgres://hbvrwvuwkcodfm:c7eb18f8d9d20e75348b1c7282058ab8272e92e58c255a9a7c86d57e2e88a3cc@ec2-52-203-165-126.compute-1.amazonaws.com:5432/d5djmd6ii028mk')
+# Construct the DATABASE_URL
+DATABASE_URL = f"postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{db_name}?sslmode=require"
+DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+
 
 
 # checking the table names
